@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Category } from './category.model';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -14,6 +14,7 @@ export class CategoryService {
 
     async getCategoryByTitle(title: string) {
         const category = await this.categoryRepository.findOne({ where: { title } })
+        if (!category) throw new HttpException('Category not found', HttpStatus.NOT_FOUND)
         return category
     }
 }
